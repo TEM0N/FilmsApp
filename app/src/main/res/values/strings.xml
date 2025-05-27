@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FilmsApp</string>
+    <string name="error_loading">loading error</string>
+    <string name="error_no_internet">internet connection error</string>
 </resources>

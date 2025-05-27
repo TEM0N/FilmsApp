@@ -50,7 +50,16 @@ android {
 }
 
 dependencies {
-
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //DI
+    implementation("io.insert-koin:koin-androidx-compose:3.5.0")
+    //image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    //leakcanary
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.14")
+    //default
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

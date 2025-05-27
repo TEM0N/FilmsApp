@@ -1,4 +1,4 @@
-package an.imation.filmsapp.ui.theme
+package an.imation.filmsapp.presentation.theme
 
 import android.app.Activity
 import android.os.Build
