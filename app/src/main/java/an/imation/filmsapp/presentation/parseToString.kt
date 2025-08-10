@@ -1,7 +1,7 @@
 package an.imation.filmsapp.presentation
 
 import an.imation.filmsapp.R
-import an.imation.filmsapp.domain.MovieExceptionDomainModel
+import an.imation.filmsapp.domain.model.MovieExceptionDomainModel
 
 fun MovieExceptionDomainModel.parseToString() = when (this) {
     is MovieExceptionDomainModel.NoInternetConnection -> R.string.error_no_internet

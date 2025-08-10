@@ -9,7 +9,11 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -32,6 +36,19 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+
+object MyTypography {
+    val bodySmall = TextStyle(
+        fontSize = 12.sp,
+        color = Color.Black,
+        fontWeight = FontWeight.Normal
+    )
+
+    val titleSmall = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold
+    )
+}
 
 @Composable
 fun FilmsAppTheme(

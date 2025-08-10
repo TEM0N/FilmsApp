@@ -1,7 +1,11 @@
-package an.imation.filmsapp.presentation
+package an.imation.filmsapp.presentation.vm
 
-import an.imation.filmsapp.domain.FetchPopularMoviesUseCase
+import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
 import an.imation.filmsapp.domain.TResult
+import an.imation.filmsapp.presentation.movie.MovieEvent
+import an.imation.filmsapp.presentation.movie.MovieIntent
+import an.imation.filmsapp.presentation.movie.MovieState
+import an.imation.filmsapp.presentation.parseToString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,18 +29,30 @@ class MovieViewModel(
     init {
         loadMovies()
     }
-
+    fun onIntent(intent: MovieIntent) {
+        when (intent) {
+            MovieIntent.LoadNextPage -> loadMovies()
+        }
+    }
     private fun loadMovies() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
+        val state = _uiState.value
+        if (state.isLoading || !state.isHaveNextPage) return
 
-            when (val result = fetchMovies()) {
+        _uiState.update { it.copy(isLoading = true, error = null) }
+
+        viewModelScope.launch {
+            //_uiState.update { it.copy(isLoading = true, error = null) }
+
+            when (val result = fetchMovies(state.nextPage)) {
                 is TResult.Success -> {
                     _uiState.update {
                         it.copy(
-                        movies = result.data,
-                        isLoading = false,
-                        error = null
+                            movies = (it.movies + result.data.movies).distinctBy { movie -> movie.id },
+                            maxPage = result.data.maxPage,
+                            nextPage = it.nextPage + 1,
+                            lastPageSize = result.data.movies.size,
+                            isLoading = false,
+                            error = null
                         )
                     }
                 }

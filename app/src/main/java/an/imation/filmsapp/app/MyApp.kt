@@ -1,12 +1,16 @@
 package an.imation.filmsapp.app
 
-import an.imation.filmsapp.data.MovieDataMapper
-import an.imation.filmsapp.data.MovieRepositoryImpl
-import an.imation.filmsapp.data.TmdbApi
-import an.imation.filmsapp.domain.FetchPopularMoviesUseCase
-import an.imation.filmsapp.domain.IMovieRepository
-import an.imation.filmsapp.presentation.MovieViewModel
+import an.imation.filmsapp.OkhttpCache.setOkhttpCache
+import an.imation.filmsapp.MyOkHttpClient
+import an.imation.filmsapp.data.mapper.MovieDataMapper
+import an.imation.filmsapp.data.repositoryimpl.MovieRepositoryImpl
+import an.imation.filmsapp.data.ITmdbApi
+import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
+import an.imation.filmsapp.domain.repository.IMovieRepository
+import an.imation.filmsapp.presentation.vm.MovieViewModel
 import android.app.Application
+import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -29,15 +33,32 @@ class MyApplication : Application() {
     }
 }
 val appModule = module {
-    single<TmdbApi> {
-        Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .addConverterFactory(GsonConverterFactory.create())
+    single {
+        OkHttpClient.Builder()
+            .addInterceptor(AuthorizationInterceptor())
             .build()
-            .create(TmdbApi::class.java)
     }
 
-    single<IMovieRepository> { MovieRepositoryImpl(get(), MovieDataMapper()) }
+    single<Retrofit> {
+        Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create())
+            //.client(MyOkHttpClient().get())
+            .build()
+            .setOkhttpCache(androidApplication())
+    }
+
+    single<ITmdbApi> {
+        get<Retrofit>().create(ITmdbApi::class.java)
+    }
+    factory<MovieDataMapper> { MovieDataMapper() }
+    single<IMovieRepository> {
+        MovieRepositoryImpl(
+            api = get<ITmdbApi>(),
+            mapper = get<MovieDataMapper>()
+        )
+    }
     factory<FetchPopularMoviesUseCase> { FetchPopularMoviesUseCase(repository = get<IMovieRepository>()) }
     viewModel<MovieViewModel> {
         MovieViewModel(

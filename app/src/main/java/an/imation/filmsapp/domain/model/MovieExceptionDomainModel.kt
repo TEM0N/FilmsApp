@@ -1,4 +1,4 @@
-package an.imation.filmsapp.domain
+package an.imation.filmsapp.domain.model
 
 sealed class MovieExceptionDomainModel(exception: Throwable) : Throwable(exception) {
     override val cause: Throwable = exception

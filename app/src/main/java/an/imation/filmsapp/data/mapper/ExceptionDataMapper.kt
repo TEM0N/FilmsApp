@@ -1,6 +1,6 @@
-package an.imation.filmsapp.data
+package an.imation.filmsapp.data.mapper
 
-import an.imation.filmsapp.domain.MovieExceptionDomainModel
+import an.imation.filmsapp.domain.model.MovieExceptionDomainModel
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
