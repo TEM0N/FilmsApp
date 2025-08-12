@@ -4,6 +4,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
+
 }
 
 android {
@@ -74,6 +76,12 @@ android {
 }
 
 dependencies {
+    //raamcosta
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.34.0")
+    implementation("io.github.raamcosta.compose-destinations:core:1.9.54")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.54")
+
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

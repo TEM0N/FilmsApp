@@ -5,8 +5,13 @@ import an.imation.filmsapp.MyOkHttpClient
 import an.imation.filmsapp.data.mapper.MovieDataMapper
 import an.imation.filmsapp.data.repositoryimpl.MovieRepositoryImpl
 import an.imation.filmsapp.data.ITmdbApi
+import an.imation.filmsapp.data.mapper.GenreDataMapper
+import an.imation.filmsapp.data.repositoryimpl.GenreRepositoryImpl
+import an.imation.filmsapp.domain.repository.IGenreRepository
 import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
 import an.imation.filmsapp.domain.repository.IMovieRepository
+import an.imation.filmsapp.domain.usecase.FetchGenresUseCase
+import an.imation.filmsapp.presentation.vm.GenresViewModel
 import an.imation.filmsapp.presentation.vm.MovieViewModel
 import android.app.Application
 import okhttp3.OkHttpClient
@@ -65,4 +70,10 @@ val appModule = module {
             fetchMovies = get<FetchPopularMoviesUseCase>()
         )
     }
+
+    factory<GenreDataMapper> { GenreDataMapper() }
+    single<IGenreRepository> { GenreRepositoryImpl(api = get(), mapper = get()) }
+    factory<FetchGenresUseCase> { FetchGenresUseCase(repository = get()) }
+    viewModel<GenresViewModel> { GenresViewModel(fetchGenres = get()) }
+
 }

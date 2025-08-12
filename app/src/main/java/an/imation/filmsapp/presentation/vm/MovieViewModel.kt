@@ -23,8 +23,8 @@ class MovieViewModel(
     private val _uiState = MutableStateFlow(MovieState())
     val uiState: StateFlow<MovieState> = _uiState.asStateFlow()
 
-    private val _events = MutableSharedFlow<MovieEvent>()
-    val events: SharedFlow<MovieEvent> = _events
+    private val _events = SingleFlowEvent<MovieEvent>(viewModelScope)
+    val events= _events.flow
 
     init {
         loadMovies()

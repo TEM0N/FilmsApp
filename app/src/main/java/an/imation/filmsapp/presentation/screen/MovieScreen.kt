@@ -5,6 +5,7 @@ import an.imation.filmsapp.presentation.vm.MovieViewModel
 import an.imation.filmsapp.presentation.movie.MovieEvent
 import an.imation.filmsapp.presentation.movie.MovieIntent
 import an.imation.filmsapp.presentation.movie.MovieState
+import an.imation.filmsapp.presentation.screen.destinations.GenresScreenDestination
 import an.imation.filmsapp.presentation.theme.MyTypography
 import android.util.Log
 import android.widget.Toast
@@ -54,18 +55,24 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import org.koin.androidx.compose.koinViewModel
+@RootNavGraph(start = true)
+@Destination
 @Composable
-fun MovieScreen() {
+fun MovieScreen(navigator: DestinationsNavigator) {
     val vm = koinViewModel<MovieViewModel>()
     val state by vm.uiState.collectAsStateWithLifecycle()
     val event: SharedFlow<MovieEvent> by remember { mutableStateOf(vm.events) }
     val context = LocalContext.current
     MovieUI(
         state = state,
-        intent = vm::onIntent
+        intent = vm::onIntent,
+        navigator = navigator
     )
 
     LaunchedEffect(Unit) {
@@ -83,7 +90,8 @@ fun MovieScreen() {
 @Preview
 private fun MovieUI(
     state: MovieState = MovieState(),
-    intent: (MovieIntent) -> Unit = {}
+    intent: (MovieIntent) -> Unit = {},
+    navigator: DestinationsNavigator? = null
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -94,7 +102,7 @@ private fun MovieUI(
                 .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navigator?.navigate(GenresScreenDestination)}) {
                 Icon(
                     imageVector = Icons.Default.List,
                     contentDescription = stringResource(R.string.category)
@@ -124,32 +132,6 @@ private fun MovieUI(
             state.movies.isEmpty() && state.error != null -> ErrorBlock(error = stringResource(id = state.error), intent)
             else -> MoviesGrid(state.movies, intent)
         }
-    }
-}
-
-@Composable
-@Preview
-private fun LoadingBlock() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-@Preview
-private fun ErrorBlock(
-    error: String = "",
-    intent: (MovieIntent) -> Unit = {}
-) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(error, color = colorResource(id = R.color.red))
     }
 }
 
