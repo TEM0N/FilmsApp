@@ -165,7 +165,7 @@ private fun MoviesGrid(
 
 @Composable
 @Preview
-private fun MovieCard(
+fun MovieCard(
     movie: MovieDomainModel = PreviewMocks.emptyMovie
 ) {
     Card(

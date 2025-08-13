@@ -2,16 +2,21 @@ package an.imation.filmsapp.presentation.screen
 
 import an.imation.filmsapp.R
 import an.imation.filmsapp.domain.model.GenreDomainModel
+import an.imation.filmsapp.domain.model.MovieDomainModel
 import an.imation.filmsapp.presentation.genre.GenreEvent
 import an.imation.filmsapp.presentation.genre.GenreIntent
 import an.imation.filmsapp.presentation.genre.GenresState
 import an.imation.filmsapp.presentation.vm.GenresViewModel
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -69,14 +74,15 @@ private fun GenresUI(
         when {
             state.isLoading -> LoadingBlock()
             state.error != null -> ErrorBlock(error = stringResource(id = state.error))
-            else -> GenresListBlock(genres = state.genres)
+            else -> GenresListBlock(genres = state.genres, moviesByGenre = state.moviesByGenre)
         }
     }
 }
 @Composable
 @Preview
 private fun GenresListBlock(
-    genres: List<GenreDomainModel> = emptyList()
+    genres: List<GenreDomainModel> = emptyList(),
+    moviesByGenre: Map<Int, List<MovieDomainModel>> = emptyMap()
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -88,6 +94,20 @@ private fun GenresListBlock(
                     .fillMaxWidth()
                     .padding(16.dp)
             )
+            val movies = moviesByGenre[genre.id] ?: emptyList()
+            if (movies.isNotEmpty()) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(movies) { movie ->
+                        MovieCard(movie)
+                    }
+                }
+            }
             HorizontalDivider()
         }
     }

@@ -7,10 +7,13 @@ import an.imation.filmsapp.data.repositoryimpl.MovieRepositoryImpl
 import an.imation.filmsapp.data.ITmdbApi
 import an.imation.filmsapp.data.mapper.GenreDataMapper
 import an.imation.filmsapp.data.repositoryimpl.GenreRepositoryImpl
+import an.imation.filmsapp.data.repositoryimpl.MovieByGenreRepositoryImpl
 import an.imation.filmsapp.domain.repository.IGenreRepository
+import an.imation.filmsapp.domain.repository.IMovieByGenreRepository
 import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
 import an.imation.filmsapp.domain.repository.IMovieRepository
 import an.imation.filmsapp.domain.usecase.FetchGenresUseCase
+import an.imation.filmsapp.domain.usecase.FetchMoviesByGenreUseCase
 import an.imation.filmsapp.presentation.vm.GenresViewModel
 import an.imation.filmsapp.presentation.vm.MovieViewModel
 import android.app.Application
@@ -72,8 +75,32 @@ val appModule = module {
     }
 
     factory<GenreDataMapper> { GenreDataMapper() }
-    single<IGenreRepository> { GenreRepositoryImpl(api = get(), mapper = get()) }
-    factory<FetchGenresUseCase> { FetchGenresUseCase(repository = get()) }
-    viewModel<GenresViewModel> { GenresViewModel(fetchGenres = get()) }
+    single<IGenreRepository> {
+        GenreRepositoryImpl(
+            api = get<ITmdbApi>(),
+            mapper = get<GenreDataMapper>()
+        )
+    }
 
+    factory<FetchGenresUseCase> {
+        FetchGenresUseCase(repository = get<IGenreRepository>())
+    }
+
+    viewModel<GenresViewModel> {
+        GenresViewModel(
+            fetchGenres = get<FetchGenresUseCase>(),
+            fetchMoviesByGenre = get<FetchMoviesByGenreUseCase>()
+        )
+    }
+
+    single<IMovieByGenreRepository> {
+        MovieByGenreRepositoryImpl(
+            api = get<ITmdbApi>(),
+            mapper = get<MovieDataMapper>()
+        )
+    }
+
+    factory<FetchMoviesByGenreUseCase> {
+        FetchMoviesByGenreUseCase(repository = get<IMovieByGenreRepository>())
+    }
 }

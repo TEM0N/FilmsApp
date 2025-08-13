@@ -18,5 +18,12 @@ interface ITmdbApi {
     @GET("genre/movie/list")
     @ResponseCache(2, TimeUnit.MINUTES)
     suspend fun getGenres(): GenresResponseApiModel
+
+    @GET("discover/movie")
+    @ResponseCache(2, TimeUnit.MINUTES)
+    suspend fun getMoviesByGenre(
+        @Query("with_genres") genreId: Int,
+        @Query("page") page: Int = 1
+    ): PopularMoviesResponseApiModel
 }
 
