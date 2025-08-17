@@ -6,11 +6,11 @@ import an.imation.filmsapp.presentation.movie.MovieEvent
 import an.imation.filmsapp.presentation.movie.MovieIntent
 import an.imation.filmsapp.presentation.movie.MovieState
 import an.imation.filmsapp.presentation.screen.destinations.GenresScreenDestination
+import an.imation.filmsapp.presentation.screen.destinations.MovieDetailsScreenDestination
 import an.imation.filmsapp.presentation.theme.MyTypography
-import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,20 +20,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -42,19 +38,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -130,7 +122,7 @@ private fun MovieUI(
         when {
             state.movies.isEmpty() && state.isLoading -> LoadingBlock()
             state.movies.isEmpty() && state.error != null -> ErrorBlock(error = stringResource(id = state.error), intent)
-            else -> MoviesGrid(state.movies, intent)
+            else -> MoviesGrid(state.movies, intent, navigator)
         }
     }
 }
@@ -140,6 +132,7 @@ private fun MovieUI(
 private fun MoviesGrid(
     movies: List<MovieDomainModel> = listOf(PreviewMocks.emptyMovie),
     intent: (MovieIntent) -> Unit = {},
+    navigator: DestinationsNavigator? = null,
     visibleThreshold: Int = 10
 ) {
     val listState = rememberLazyGridState()
@@ -157,7 +150,7 @@ private fun MoviesGrid(
                 //Log.d("MoviesGrid", "Request LoadNextPage: index = $index, movies.size = ${movies.size}")
                 intent(MovieIntent.LoadNextPage)
             }
-            MovieCard(movie)
+            MovieCard(movie, navigator)
         }
 
     }
@@ -166,13 +159,17 @@ private fun MoviesGrid(
 @Composable
 @Preview
 fun MovieCard(
-    movie: MovieDomainModel = PreviewMocks.emptyMovie
+    movie: MovieDomainModel = PreviewMocks.emptyMovie,
+    navigator: DestinationsNavigator? = null
 ) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .aspectRatio(0.57f),
+            .aspectRatio(0.57f)
+            .clickable {
+                navigator?.navigate(MovieDetailsScreenDestination(movie.id))
+            },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {

@@ -5,16 +5,21 @@ import an.imation.filmsapp.MyOkHttpClient
 import an.imation.filmsapp.data.mapper.MovieDataMapper
 import an.imation.filmsapp.data.repositoryimpl.MovieRepositoryImpl
 import an.imation.filmsapp.data.ITmdbApi
+import an.imation.filmsapp.data.mapper.DetailsDataMapper
 import an.imation.filmsapp.data.mapper.GenreDataMapper
 import an.imation.filmsapp.data.repositoryimpl.GenreRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.MovieByGenreRepositoryImpl
+import an.imation.filmsapp.data.repositoryimpl.MovieDetailsRepositoryImpl
 import an.imation.filmsapp.domain.repository.IGenreRepository
 import an.imation.filmsapp.domain.repository.IMovieByGenreRepository
+import an.imation.filmsapp.domain.repository.IMovieDetailsRepository
 import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
 import an.imation.filmsapp.domain.repository.IMovieRepository
 import an.imation.filmsapp.domain.usecase.FetchGenresUseCase
+import an.imation.filmsapp.domain.usecase.FetchMovieDetailsUseCase
 import an.imation.filmsapp.domain.usecase.FetchMoviesByGenreUseCase
 import an.imation.filmsapp.presentation.vm.GenresViewModel
+import an.imation.filmsapp.presentation.vm.MovieDetailsViewModel
 import an.imation.filmsapp.presentation.vm.MovieViewModel
 import android.app.Application
 import okhttp3.OkHttpClient
@@ -103,4 +108,24 @@ val appModule = module {
     factory<FetchMoviesByGenreUseCase> {
         FetchMoviesByGenreUseCase(repository = get<IMovieByGenreRepository>())
     }
+    factory<DetailsDataMapper> { DetailsDataMapper() }
+
+    single<IMovieDetailsRepository> {
+        MovieDetailsRepositoryImpl(
+            api = get<ITmdbApi>(),
+            mapper = get<DetailsDataMapper>()
+        )
+    }
+
+    factory<FetchMovieDetailsUseCase> {
+        FetchMovieDetailsUseCase(repository = get<IMovieDetailsRepository>())
+    }
+
+    viewModel<MovieDetailsViewModel> { (movieId: Int) ->
+        MovieDetailsViewModel(
+            fetchDetails = get<FetchMovieDetailsUseCase>(),
+            movieId = movieId
+        )
+    }
+
 }

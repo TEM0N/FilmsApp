@@ -1,9 +1,11 @@
 package an.imation.filmsapp.data
 
 import an.imation.filmsapp.data.model.GenresResponseApiModel
+import an.imation.filmsapp.data.model.MovieDetailsApiModel
 import an.imation.filmsapp.data.model.PopularMoviesResponseApiModel
 import com.andretietz.retrofit.ResponseCache
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
@@ -25,5 +27,10 @@ interface ITmdbApi {
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int = 1
     ): PopularMoviesResponseApiModel
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetails(
+        @Path("movie_id") movieId: Int
+    ): MovieDetailsApiModel
 }
 

@@ -13,8 +13,8 @@ class MovieByGenreRepositoryImpl(
     private val api: ITmdbApi,
     private val mapper: MovieDataMapper
 ) : IMovieByGenreRepository {
-    override suspend fun fetchMoviesByGenre(genreId: Int): TResult<List<MovieDomainModel>, MovieExceptionDomainModel> =
-        runCatching {
+    override suspend fun fetchMoviesByGenre(genreId: Int): TResult<List<MovieDomainModel>, MovieExceptionDomainModel> {
+        return runCatching {
             val response = api.getMoviesByGenre(genreId)
             val movies = response.movies.mapNotNull { mapper.toDomain(it) }
             val invalidCurrent = response.movies.size - movies.size
@@ -27,4 +27,5 @@ class MovieByGenreRepositoryImpl(
                 e.toMovieExceptionDomainModel()
             )
         }
+    }
 }

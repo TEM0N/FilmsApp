@@ -5,14 +5,11 @@ import an.imation.filmsapp.domain.model.GenreDomainModel
 import an.imation.filmsapp.domain.usecase.FetchGenresUseCase
 import an.imation.filmsapp.domain.usecase.FetchMoviesByGenreUseCase
 import an.imation.filmsapp.presentation.genre.GenreEvent
-import an.imation.filmsapp.presentation.genre.GenreIntent
 import an.imation.filmsapp.presentation.genre.GenresState
 import an.imation.filmsapp.presentation.parseToString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

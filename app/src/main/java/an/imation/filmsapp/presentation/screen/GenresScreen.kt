@@ -47,7 +47,8 @@ fun GenresScreen(navigator: DestinationsNavigator) {
     val context = LocalContext.current
 
     GenresUI(
-        state = state
+        state = state,
+        navigator = navigator
     )
 
     LaunchedEffect(Unit) {
@@ -61,6 +62,7 @@ fun GenresScreen(navigator: DestinationsNavigator) {
 @Preview
 private fun GenresUI(
     state: GenresState = GenresState(),
+    navigator: DestinationsNavigator? = null,
     intent: (GenreIntent) -> Unit = {}
 ) {
     Column(
@@ -74,7 +76,7 @@ private fun GenresUI(
         when {
             state.isLoading -> LoadingBlock()
             state.error != null -> ErrorBlock(error = stringResource(id = state.error))
-            else -> GenresListBlock(genres = state.genres, moviesByGenre = state.moviesByGenre)
+            else -> GenresListBlock(genres = state.genres,navigator= navigator, moviesByGenre = state.moviesByGenre)
         }
     }
 }
@@ -82,6 +84,7 @@ private fun GenresUI(
 @Preview
 private fun GenresListBlock(
     genres: List<GenreDomainModel> = emptyList(),
+    navigator: DestinationsNavigator? = null,
     moviesByGenre: Map<Int, List<MovieDomainModel>> = emptyMap()
 ) {
     LazyColumn(
@@ -104,7 +107,7 @@ private fun GenresListBlock(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(movies) { movie ->
-                        MovieCard(movie)
+                        MovieCard(movie, navigator)
                     }
                 }
             }
