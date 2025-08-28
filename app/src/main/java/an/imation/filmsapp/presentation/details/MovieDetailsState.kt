@@ -6,5 +6,7 @@ import an.imation.filmsapp.presentation.screen.PreviewMocks
 data class MovieDetailsState(
     val isLoading: Boolean = false,
     val details: MovieDetailsDomainModel = PreviewMocks.emptyMovieDetails,
+    val isFavorite: Boolean = false,
+    val isInWatchlist: Boolean = false,
     val error: Int? = null
 )
