@@ -5,6 +5,7 @@ import an.imation.filmsapp.presentation.vm.MovieViewModel
 import an.imation.filmsapp.presentation.movie.MovieEvent
 import an.imation.filmsapp.presentation.movie.MovieIntent
 import an.imation.filmsapp.presentation.movie.MovieState
+import an.imation.filmsapp.presentation.screen.destinations.FavoritesScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.GenresScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.MovieDetailsScreenDestination
 import an.imation.filmsapp.presentation.theme.MyTypography
@@ -25,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -100,9 +102,9 @@ private fun MovieUI(
                     contentDescription = stringResource(R.string.category)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navigator?.navigate(FavoritesScreenDestination)}) {
                 Icon(
-                    imageVector = Icons.Default.Favorite,
+                    imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = stringResource(R.string.favorite)
                 )
             }
@@ -129,7 +131,7 @@ private fun MovieUI(
 
 @Composable
 @Preview
-private fun MoviesGrid(
+fun MoviesGrid(
     movies: List<MovieDomainModel> = listOf(PreviewMocks.emptyMovie),
     intent: (MovieIntent) -> Unit = {},
     navigator: DestinationsNavigator? = null,

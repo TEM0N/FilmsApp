@@ -5,23 +5,38 @@ import an.imation.filmsapp.MyOkHttpClient
 import an.imation.filmsapp.data.mapper.MovieDataMapper
 import an.imation.filmsapp.data.repositoryimpl.MovieRepositoryImpl
 import an.imation.filmsapp.data.ITmdbApi
+import an.imation.filmsapp.data.database.AppDatabase
 import an.imation.filmsapp.data.mapper.DetailsDataMapper
 import an.imation.filmsapp.data.mapper.GenreDataMapper
+import an.imation.filmsapp.data.repositoryimpl.FavoritesRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.GenreRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.MovieByGenreRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.MovieDetailsRepositoryImpl
+import an.imation.filmsapp.data.repositoryimpl.WatchlistRepositoryImpl
+import an.imation.filmsapp.domain.repository.IFavoritesRepository
 import an.imation.filmsapp.domain.repository.IGenreRepository
 import an.imation.filmsapp.domain.repository.IMovieByGenreRepository
 import an.imation.filmsapp.domain.repository.IMovieDetailsRepository
 import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
 import an.imation.filmsapp.domain.repository.IMovieRepository
+import an.imation.filmsapp.domain.repository.IWatchlistRepository
+import an.imation.filmsapp.domain.usecase.AddToFavoritesUseCase
+import an.imation.filmsapp.domain.usecase.AddToWatchlistUseCase
 import an.imation.filmsapp.domain.usecase.FetchGenresUseCase
 import an.imation.filmsapp.domain.usecase.FetchMovieDetailsUseCase
 import an.imation.filmsapp.domain.usecase.FetchMoviesByGenreUseCase
+import an.imation.filmsapp.domain.usecase.GetFavoritesUseCase
+import an.imation.filmsapp.domain.usecase.GetWatchlistUseCase
+import an.imation.filmsapp.domain.usecase.IsFavoriteUseCase
+import an.imation.filmsapp.domain.usecase.IsInWatchlistUseCase
+import an.imation.filmsapp.domain.usecase.RemoveFromFavoritesUseCase
+import an.imation.filmsapp.domain.usecase.RemoveFromWatchlistUseCase
+import an.imation.filmsapp.presentation.vm.FavoritesViewModel
 import an.imation.filmsapp.presentation.vm.GenresViewModel
 import an.imation.filmsapp.presentation.vm.MovieDetailsViewModel
 import an.imation.filmsapp.presentation.vm.MovieViewModel
 import android.app.Application
+import androidx.room.Room
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -124,7 +139,43 @@ val appModule = module {
     viewModel<MovieDetailsViewModel> { (movieId: Int) ->
         MovieDetailsViewModel(
             fetchDetails = get<FetchMovieDetailsUseCase>(),
+            addToFavorites = get<AddToFavoritesUseCase>(),
+            removeFromFavorites = get<RemoveFromFavoritesUseCase>(),
+            addToWatchlist = get<AddToWatchlistUseCase>(),
+            removeFromWatchlist = get<RemoveFromWatchlistUseCase>(),
+            isFavorite = get<IsFavoriteUseCase>(),
+            isInWatchlist = get<IsInWatchlistUseCase>(),
             movieId = movieId
+        )
+    }
+
+
+    single {
+        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "movies_db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+    single { get<AppDatabase>().favoritesDao() }
+    single { get<AppDatabase>().watchlistDao() }
+
+    single<IFavoritesRepository> { FavoritesRepositoryImpl(get()) }
+    single<IWatchlistRepository> { WatchlistRepositoryImpl(get()) }
+
+// usecases
+    factory { AddToFavoritesUseCase(get()) }
+    factory { RemoveFromFavoritesUseCase(get()) }
+    factory { GetFavoritesUseCase(get()) }
+    factory { IsFavoriteUseCase(get()) }
+
+    factory { AddToWatchlistUseCase(get()) }
+    factory { RemoveFromWatchlistUseCase(get()) }
+    factory { GetWatchlistUseCase(get()) }
+    factory { IsInWatchlistUseCase(get()) }
+
+    viewModel<FavoritesViewModel> {
+        FavoritesViewModel(
+            getFavorites = get(),
+            getWatchlist = get()
         )
     }
 

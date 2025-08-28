@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id ("kotlin-kapt")
 
 }
 
@@ -76,6 +77,11 @@ android {
 }
 
 dependencies {
+    //Room
+    implementation ("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+
     //raamcosta
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.34.0")
