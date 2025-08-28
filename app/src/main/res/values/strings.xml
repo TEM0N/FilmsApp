@@ -19,4 +19,7 @@
     <string name="overview">Overview</string>
     <string name="production_companies">Production companies</string>
     <string name="production_countries">Production countries</string>
+    <string name="details">Детали</string>
+    <string name="favorites">Избранное</string>
+    <string name="want_see">Хочу посмотреть</string>
 </resources>
