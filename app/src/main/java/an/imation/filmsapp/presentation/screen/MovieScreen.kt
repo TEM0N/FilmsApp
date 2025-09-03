@@ -8,6 +8,7 @@ import an.imation.filmsapp.presentation.movie.MovieState
 import an.imation.filmsapp.presentation.screen.destinations.FavoritesScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.GenresScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.MovieDetailsScreenDestination
+import an.imation.filmsapp.presentation.screen.destinations.SettingsScreenDestination
 import an.imation.filmsapp.presentation.theme.MyTypography
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -41,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -99,7 +101,7 @@ private fun MovieUI(
             IconButton(onClick = {navigator?.navigate(GenresScreenDestination)}) {
                 Icon(
                     imageVector = Icons.Default.List,
-                    contentDescription = stringResource(R.string.category)
+                    contentDescription = stringResource(R.string.genres)
                 )
             }
             IconButton(onClick = {navigator?.navigate(FavoritesScreenDestination)}) {
@@ -114,7 +116,7 @@ private fun MovieUI(
                     contentDescription = stringResource(R.string.search)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navigator?.navigate(SettingsScreenDestination)}) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = stringResource(R.string.settings)
@@ -201,7 +203,9 @@ fun MovieCard(
                 )
                 Text(
                     "★ ${movie.rating}",
-                    style = MyTypography.bodySmall,
+                    style = MyTypography.bodySmall.copy(
+                        color = Color.Blue
+                    ),
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }

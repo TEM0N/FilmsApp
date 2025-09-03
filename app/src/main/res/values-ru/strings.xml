@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">FilmsApp</string>
+    <string name="error_loading">ошибка загрузки</string>
+    <string name="error_no_internet">ошибка интернет соединения</string>
+    <string name="favorite">Избранное</string>
+    <string name="search">Поиск</string>
+    <string name="settings">Настройки</string>
+    <string name="loading">загрузка</string>
+    <string name="original_title">Оригинальное название</string>
+    <string name="release_date">Дата релиза</string>
+    <string name="runtime">Длительность</string>
+    <string name="genres">Жанры</string>
+    <string name="rating">Рейтинг</string>
+    <string name="language">Язык</string>
+    <string name="budget">Бюджет</string>
+    <string name="revenue">Доход</string>
+    <string name="status">Статус</string>
+    <string name="overview">Обзор</string>
+    <string name="production_companies">Производственные компании</string>
+    <string name="production_countries">Страны-производители</string>
+    <string name="details">Детали</string>
+    <string name="want_see">Хочу посмотреть</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+</resources>

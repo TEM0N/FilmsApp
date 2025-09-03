@@ -2,7 +2,6 @@ package an.imation.filmsapp.presentation.vm
 
 import an.imation.filmsapp.domain.usecase.GetFavoritesUseCase
 import an.imation.filmsapp.domain.usecase.GetWatchlistUseCase
-import an.imation.filmsapp.presentation.details.MovieDetailsEvent
 import an.imation.filmsapp.presentation.favorite.FavoritesEvent
 import an.imation.filmsapp.presentation.favorite.FavoritesIntent
 import an.imation.filmsapp.presentation.favorite.FavoritesState

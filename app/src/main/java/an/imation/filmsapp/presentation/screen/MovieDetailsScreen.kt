@@ -97,7 +97,8 @@ private fun MovieDetailsUI(
             isInWatchlist = state.isInWatchlist,
             onToggleFavorite = onToggleFavorite,
             onToggleWatchlist = onToggleWatchlist
-        )    }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -203,7 +204,9 @@ private fun InfoBlock(
             )
             Text(
                 text = value,
-                style = MyTypography.bodySmall
+                style = MyTypography.bodySmall.copy(
+                    color = Color.DarkGray
+                )
             )
         }
     }

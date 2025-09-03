@@ -75,7 +75,7 @@ private fun GenresUI(
             .fillMaxSize()
     ) {
         TopAppBar(
-            title = { Text(stringResource(R.string.category))},
+            title = { Text(stringResource(R.string.genres))},
             navigationIcon = {
                 IconButton(onClick = { navigator?.popBackStack() }) {
                     Icon(

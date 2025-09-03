@@ -93,7 +93,7 @@ private fun FavoritesHeader(
 ) {
     Column {
         TopAppBar(
-            title = { Text(stringResource(R.string.category)) },
+            title = { Text("") },
             navigationIcon = {
                 IconButton(onClick = { navigator?.popBackStack() }) {
                     Icon(
@@ -110,7 +110,7 @@ private fun FavoritesHeader(
                 selected = selectedTab == 0,
                 onClick = { onTabSelected(0) }
             ) {
-                Text(stringResource(R.string.favorites))
+                Text(stringResource(R.string.favorite))
             }
             Tab(
                 selected = selectedTab == 1,

@@ -12,6 +12,7 @@ import an.imation.filmsapp.data.repositoryimpl.FavoritesRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.GenreRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.MovieByGenreRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.MovieDetailsRepositoryImpl
+import an.imation.filmsapp.data.repositoryimpl.SettingsRepositoryImpl
 import an.imation.filmsapp.data.repositoryimpl.WatchlistRepositoryImpl
 import an.imation.filmsapp.domain.repository.IFavoritesRepository
 import an.imation.filmsapp.domain.repository.IGenreRepository
@@ -19,6 +20,7 @@ import an.imation.filmsapp.domain.repository.IMovieByGenreRepository
 import an.imation.filmsapp.domain.repository.IMovieDetailsRepository
 import an.imation.filmsapp.domain.usecase.FetchPopularMoviesUseCase
 import an.imation.filmsapp.domain.repository.IMovieRepository
+import an.imation.filmsapp.domain.repository.ISettingsRepository
 import an.imation.filmsapp.domain.repository.IWatchlistRepository
 import an.imation.filmsapp.domain.usecase.AddToFavoritesUseCase
 import an.imation.filmsapp.domain.usecase.AddToWatchlistUseCase
@@ -29,13 +31,21 @@ import an.imation.filmsapp.domain.usecase.GetFavoritesUseCase
 import an.imation.filmsapp.domain.usecase.GetWatchlistUseCase
 import an.imation.filmsapp.domain.usecase.IsFavoriteUseCase
 import an.imation.filmsapp.domain.usecase.IsInWatchlistUseCase
+import an.imation.filmsapp.domain.usecase.ObserveSettingsUseCase
 import an.imation.filmsapp.domain.usecase.RemoveFromFavoritesUseCase
 import an.imation.filmsapp.domain.usecase.RemoveFromWatchlistUseCase
+import an.imation.filmsapp.domain.usecase.SetLanguageUseCase
 import an.imation.filmsapp.presentation.vm.FavoritesViewModel
 import an.imation.filmsapp.presentation.vm.GenresViewModel
 import an.imation.filmsapp.presentation.vm.MovieDetailsViewModel
 import an.imation.filmsapp.presentation.vm.MovieViewModel
+import an.imation.filmsapp.presentation.vm.SettingsViewModel
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
@@ -179,4 +189,36 @@ val appModule = module {
         )
     }
 
+    single<DataStore<Preferences>> {
+        PreferenceDataStoreFactory.create(
+            produceFile = { androidContext().preferencesDataStoreFile("settings") }
+        )
+    }
+
+    single<ISettingsRepository> {
+        SettingsRepositoryImpl(
+            dataStore = get<DataStore<Preferences>>(),
+            context = androidContext()
+        )
+    }
+
+    factory<ObserveSettingsUseCase> {
+        ObserveSettingsUseCase(get<ISettingsRepository>())
+    }
+
+    /*factory<SetThemeUseCase> {
+        SetThemeUseCase(get<ISettingsRepository>())
+    }*/
+
+    factory<SetLanguageUseCase> {
+        SetLanguageUseCase(get<ISettingsRepository>())
+    }
+
+    viewModel<SettingsViewModel> {
+        SettingsViewModel(
+            //setTheme = get<SetThemeUseCase>(),
+            setLanguage = get<SetLanguageUseCase>(),
+            observeSettings = get<ObserveSettingsUseCase>()
+        )
+    }
 }
