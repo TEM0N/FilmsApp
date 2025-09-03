@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ISettingsRepository {
     fun observeSettings(): Flow<SettingsDomainModel>
-    //suspend fun setTheme(isDark: Boolean): TResult<Unit, MovieExceptionDomainModel>
+    suspend fun setTheme(isDark: Boolean): TResult<Unit, MovieExceptionDomainModel>
     suspend fun setLanguage(language: Language): TResult<Unit, MovieExceptionDomainModel>
 }
 

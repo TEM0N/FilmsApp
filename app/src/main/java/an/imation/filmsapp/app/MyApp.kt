@@ -35,6 +35,7 @@ import an.imation.filmsapp.domain.usecase.ObserveSettingsUseCase
 import an.imation.filmsapp.domain.usecase.RemoveFromFavoritesUseCase
 import an.imation.filmsapp.domain.usecase.RemoveFromWatchlistUseCase
 import an.imation.filmsapp.domain.usecase.SetLanguageUseCase
+import an.imation.filmsapp.domain.usecase.SetThemeUseCase
 import an.imation.filmsapp.presentation.vm.FavoritesViewModel
 import an.imation.filmsapp.presentation.vm.GenresViewModel
 import an.imation.filmsapp.presentation.vm.MovieDetailsViewModel
@@ -206,9 +207,9 @@ val appModule = module {
         ObserveSettingsUseCase(get<ISettingsRepository>())
     }
 
-    /*factory<SetThemeUseCase> {
+    factory<SetThemeUseCase> {
         SetThemeUseCase(get<ISettingsRepository>())
-    }*/
+    }
 
     factory<SetLanguageUseCase> {
         SetLanguageUseCase(get<ISettingsRepository>())
@@ -216,7 +217,7 @@ val appModule = module {
 
     viewModel<SettingsViewModel> {
         SettingsViewModel(
-            //setTheme = get<SetThemeUseCase>(),
+            setTheme = get<SetThemeUseCase>(),
             setLanguage = get<SetLanguageUseCase>(),
             observeSettings = get<ObserveSettingsUseCase>()
         )

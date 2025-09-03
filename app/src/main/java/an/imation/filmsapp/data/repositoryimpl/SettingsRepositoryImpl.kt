@@ -35,13 +35,13 @@ class SettingsRepositoryImpl(
             }
             .distinctUntilChanged()
 
-    /*override suspend fun setTheme(isDark: Boolean): TResult<Unit, MovieExceptionDomainModel> =
+    override suspend fun setTheme(isDark: Boolean): TResult<Unit, MovieExceptionDomainModel> =
         try {
             dataStore.edit { it[DARK_THEME_KEY] = isDark }
             TResult.Success(Unit)
         } catch (e: Throwable) {
             TResult.Error(MovieExceptionDomainModel.Other(e))
-        }*/
+        }
 
     override suspend fun setLanguage(language: Language): TResult<Unit, MovieExceptionDomainModel> =
         try {

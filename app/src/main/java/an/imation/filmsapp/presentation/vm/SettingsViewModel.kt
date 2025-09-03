@@ -5,6 +5,7 @@ import an.imation.filmsapp.domain.TResult
 import an.imation.filmsapp.domain.model.Language
 import an.imation.filmsapp.domain.usecase.ObserveSettingsUseCase
 import an.imation.filmsapp.domain.usecase.SetLanguageUseCase
+import an.imation.filmsapp.domain.usecase.SetThemeUseCase
 import an.imation.filmsapp.presentation.setting.SettingsEvent
 import an.imation.filmsapp.presentation.setting.SettingsIntent
 import an.imation.filmsapp.presentation.setting.SettingsState
@@ -21,7 +22,7 @@ import kotlinx.coroutines.flow.onStart
 
 
 class SettingsViewModel(
-    //private val setTheme: SetThemeUseCase,
+    private val setTheme: SetThemeUseCase,
     private val setLanguage: SetLanguageUseCase,
     private val observeSettings: ObserveSettingsUseCase
 ) : ViewModel() {
@@ -54,11 +55,19 @@ class SettingsViewModel(
     }
 
     fun onIntent(intent: SettingsIntent) = when (intent) {
+        is SettingsIntent.ChangeTheme    -> changeTheme(intent.isDark)
         is SettingsIntent.ChangeLanguage -> changeLanguage(intent.language)
         SettingsIntent.LoadSettings      -> Unit
     }
 
-
+    private fun changeTheme(isDark: Boolean) {
+        viewModelScope.launch {
+            when (val result = setTheme(isDark)) {
+                is TResult.Success -> Unit
+                is TResult.Error   -> _events.emit(SettingsEvent.ShowError(result.exception.parseToString()))
+            }
+        }
+    }
 
     private fun changeLanguage(language: Language) {
         viewModelScope.launch {

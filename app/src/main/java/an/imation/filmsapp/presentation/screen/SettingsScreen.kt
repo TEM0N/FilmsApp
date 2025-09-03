@@ -101,10 +101,10 @@ private fun UI(
         )
 
         Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 26.dp)) {
-            /*ThemeBlock(
+            ThemeBlock(
                 isDarkTheme = state.isDarkTheme,
                 intent = intent
-            )*/
+            )
             Spacer(Modifier.height(24.dp))
             LanguageBlock(
                 current = state.language,
@@ -114,6 +114,21 @@ private fun UI(
     }
 }
 
+@Composable
+@Preview
+private fun ThemeBlock(
+    isDarkTheme: Boolean = false,
+    intent: (SettingsIntent) -> Unit = {}
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(stringResource(R.string.dark_theme))
+        Spacer(Modifier.weight(1f))
+        Switch(
+            checked = isDarkTheme,
+            onCheckedChange = { intent(SettingsIntent.ChangeTheme(it)) }
+        )
+    }
+}
 
 @Composable
 @Preview

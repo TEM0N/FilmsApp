@@ -1,0 +1,9 @@
+package an.imation.filmsapp.domain.usecase
+
+import an.imation.filmsapp.domain.TResult
+import an.imation.filmsapp.domain.model.MovieExceptionDomainModel
+import an.imation.filmsapp.domain.repository.ISettingsRepository
+
+class SetThemeUseCase(private val repo: ISettingsRepository) {
+    suspend operator fun invoke(isDark: Boolean): TResult<Unit, MovieExceptionDomainModel> = repo.setTheme(isDark)
+}
