@@ -34,4 +34,20 @@ class MovieRepositoryImpl(
             )
         }
     }
+
+    override suspend fun searchMovies(
+        query: String,
+        page: Int
+    ): TResult<MoviePageDomainModel, MovieExceptionDomainModel> {
+        return runCatching {
+            val response = api.searchMovies(query, page)
+            val movies = response.movies.mapNotNull { mapper.toDomain(it) }
+            TResult.Success<MoviePageDomainModel, MovieExceptionDomainModel>(
+                MoviePageDomainModel(
+                    movies,
+                    response.totalPages
+                )
+            )
+        }.getOrElse { TResult.Error(it.toMovieExceptionDomainModel()) }
+    }
 }

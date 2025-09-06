@@ -23,4 +23,5 @@
     <string name="dark_theme">Тёмная тема</string>
     <string name="english">Английский</string>
     <string name="russian">Русский</string>
+    <string name="enter">Введите</string>
 </resources>

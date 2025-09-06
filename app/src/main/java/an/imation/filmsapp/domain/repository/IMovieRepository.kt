@@ -7,4 +7,6 @@ import an.imation.filmsapp.domain.model.MoviePageDomainModel
 
 interface IMovieRepository {
     suspend fun fetchPopularMovies(page: Int): TResult<MoviePageDomainModel, MovieExceptionDomainModel>
+    suspend fun searchMovies(query: String, page: Int): TResult<MoviePageDomainModel, MovieExceptionDomainModel>
+
 }

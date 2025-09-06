@@ -34,12 +34,14 @@ import an.imation.filmsapp.domain.usecase.IsInWatchlistUseCase
 import an.imation.filmsapp.domain.usecase.ObserveSettingsUseCase
 import an.imation.filmsapp.domain.usecase.RemoveFromFavoritesUseCase
 import an.imation.filmsapp.domain.usecase.RemoveFromWatchlistUseCase
+import an.imation.filmsapp.domain.usecase.SearchMoviesUseCase
 import an.imation.filmsapp.domain.usecase.SetLanguageUseCase
 import an.imation.filmsapp.domain.usecase.SetThemeUseCase
 import an.imation.filmsapp.presentation.vm.FavoritesViewModel
 import an.imation.filmsapp.presentation.vm.GenresViewModel
 import an.imation.filmsapp.presentation.vm.MovieDetailsViewModel
 import an.imation.filmsapp.presentation.vm.MovieViewModel
+import an.imation.filmsapp.presentation.vm.SearchViewModel
 import an.imation.filmsapp.presentation.vm.SettingsViewModel
 import android.app.Application
 import android.content.Context
@@ -220,6 +222,12 @@ val appModule = module {
             setTheme = get<SetThemeUseCase>(),
             setLanguage = get<SetLanguageUseCase>(),
             observeSettings = get<ObserveSettingsUseCase>()
+        )
+    }
+    factory { SearchMoviesUseCase(repository = get<IMovieRepository>()) }
+    viewModel<SearchViewModel> {
+        SearchViewModel(
+            searchMovies = get<SearchMoviesUseCase>()
         )
     }
 }

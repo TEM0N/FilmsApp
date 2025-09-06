@@ -32,5 +32,12 @@ interface ITmdbApi {
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int
     ): MovieDetailsApiModel
+
+    @GET("search/movie")
+    @ResponseCache(2, TimeUnit.MINUTES)
+    suspend fun searchMovies(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1
+    ): PopularMoviesResponseApiModel
 }
 
