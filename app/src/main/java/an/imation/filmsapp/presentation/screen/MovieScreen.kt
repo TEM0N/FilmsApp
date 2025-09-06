@@ -8,6 +8,7 @@ import an.imation.filmsapp.presentation.movie.MovieState
 import an.imation.filmsapp.presentation.screen.destinations.FavoritesScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.GenresScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.MovieDetailsScreenDestination
+import an.imation.filmsapp.presentation.screen.destinations.SearchScreenDestination
 import an.imation.filmsapp.presentation.screen.destinations.SettingsScreenDestination
 import an.imation.filmsapp.presentation.theme.MyTypography
 import android.widget.Toast
@@ -110,7 +111,7 @@ private fun MovieUI(
                     contentDescription = stringResource(R.string.favorite)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {/*navigator?.navigate(SearchScreenDestination)*/}) {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = stringResource(R.string.search)
